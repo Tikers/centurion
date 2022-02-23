@@ -48,7 +48,7 @@ class RPiDCMotor:
             # set duty cycle to 0 #TODO check if this is always off!
             self.__duty_cycle = 0
             self.__pwm.start(self.__duty_cycle)
-        # set motors in to forward motion as default
+        # set motors in to forward as default
         self.__set_direction()
 
     def __set_speed(self, desired_dc):
@@ -71,20 +71,6 @@ class RPiDCMotor:
         if self.__pin_reverse:
             GPIO.output(self.__pin_reverse, not forward)
 
-    # changed move forwarde to set direction this makes reverse and change direction redundant
-    # def __move_reverse(self):
-    #     GPIO.output(self.__pin_forward, False)
-    #     if self.__pin_reverse:
-    #         GPIO.output(self.__pin_reverse, True)
-    #     self.__forward = False
-
-    # def __change_direction(self):
-    #     #self.__duty_cycle *= -1
-    #     if self.__forward:
-    #         self.__move_reverse
-    #     else:
-    #         self.__set_direction
-
     def stop(self):
         GPIO.output(self.__pin_forward, False)
         if self.__pin_reverse:
@@ -100,7 +86,7 @@ class RPiDCMotor:
 
         if new_direction != 0 and new_direction != sign(self.__duty_cycle):
             if new_direction == 1:
-                self.__set_direction()
+                self.__set_direction(True)
             else:
                 self.__set_direction(False)
             pass
@@ -110,8 +96,19 @@ class RPiDCMotor:
         return self.__duty_cycle
 
 
-def steer(speed_change):
-    return
+
+
+def steer(motor, steer_rate):
+    #-x move left at rate x, x move right at rate x
+    #TODO we dont have motors yes... we dont want to pass motor...
+    #TODO if motor already on minimum increase other side speed?
+    if steer_rate < 0:
+        #left.change_speed(-steer_rate)
+        pass
+    else:
+        pass
+
+
 
 
 if __name__ == "__main__":
