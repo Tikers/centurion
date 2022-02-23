@@ -4,7 +4,7 @@
 import time
 
 import RPi.GPIO as GPIO
-
+from numpy import sign
 
 
 #TODO correct way? Not yet in course
@@ -51,7 +51,7 @@ class RPiDCMotor:
             self.__pwm.start(self.__duty_cycle)
         
         # set motors in to forward motion as default
-        self.move_forward()
+        self.__set_direction()
 
 
 
@@ -68,32 +68,41 @@ class RPiDCMotor:
                 self.__pwm.ChangeDutyCycle(desired_dc)
             
 
-    def move_forward(self):
-        GPIO.output(self.__pin_forward, True)
+    def __set_direction(self, forward=True):
+        self.__forward = forward
+        GPIO.output(self.__pin_forward, forward)
         if self.__pin_reverse:
-            GPIO.output(self.__pin_reverse, False)
+            GPIO.output(self.__pin_reverse, not forward)
+        
+    # changed move forwarde to set direction this makes reverse and change direction redundant
+    # def __move_reverse(self):
+    #     GPIO.output(self.__pin_forward, False)
+    #     if self.__pin_reverse:
+    #         GPIO.output(self.__pin_reverse, True)
+    #     self.__forward = False
 
-    def move_reverse(self):
-        GPIO.output(self.__pin_forward, False)
-        if self.__pin_reverse:
-            GPIO.output(self.__pin_reverse, True)
-
-    def change_direction(self):
-        self.__duty_cycle *= -1
-        #TODO ad change speed here for new current speed
-        #TODO change direction of motor (LOW PRIO)
+    # def __change_direction(self):
+    #     #self.__duty_cycle *= -1
+    #     if self.__forward:
+    #         self.__move_reverse
+    #     else:
+    #         self.__set_direction
+        
 
     def stop(self):
         GPIO.output(self.__pin_forward, False)
         if self.__pin_reverse:
             GPIO.output(self.__pin_reverse, False)
         
+
     def change_speed(self, delta):
         if not self.__pin_pwm:
             raise SpeedError("No speed control!") #TODO correct way? Not yet in course
-        #TODO change speed increase and decrease
         new_speed = self.__duty_cycle + delta
-        if sign(new_speed) != sign(self.__duty_cycle):
+        new_direction = sign(new_speed)
+        if new_direction != sign(self.__duty_cycle):
+            if not new_direction: #sign = 0
+
             #TODO change direction
             return 0
         #TODO check for min max overload (maybe use set speed and update that?)
@@ -105,16 +114,16 @@ class RPiDCMotor:
         return self.__duty_cycle
 
 
-def sign(val):
-    """Simple function to check if value is possitive (False) or negative (1)
+# def sign(val):
+#     """Simple function to check if value is possitive (False) or negative (1)
 
-    Args:
-        val (number): number to validate
+#     Args:
+#         val (number): number to validate
 
-    Returns:
-        bool: True if < 0 else False
-    """
-    return True if val < 0 else False
+#     Returns:
+#         bool: True if < 0 else False
+#     """
+#     return True if val < 0 else False
 
 def steer(speed_change):
     return
