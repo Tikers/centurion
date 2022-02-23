@@ -93,7 +93,7 @@ class RPiDCMotor:
             raise SpeedError("No speed control!") #TODO correct way? Not yet in course
         #TODO change speed increase and decrease
         new_speed = self.__duty_cycle + delta
-        if self.__sign(new_speed) != self.__sign(self.__duty_cycle):
+        if sign(new_speed) != sign(self.__duty_cycle):
             #TODO change direction
             return 0
         #TODO check for min max overload (maybe use set speed and update that?)
@@ -132,6 +132,6 @@ if __name__ == "__main__":
         left_motor.change_speed(25)
         right_motor.change_speed(25)
         print("DC= ", left_motor.get_active_dc())
-        time.sleep(5) # Sleep for 3 seconds
+        time.sleep(2) 
 
     GPIO.cleanup()
