@@ -20,10 +20,10 @@ Set all the print to the desired configuration
 def config_pins():
     # BOARD refers to pin BVM refers to GPIO
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(left_pwm,GPIO.OUT)
+    # GPIO.setup(left_pwm,GPIO.OUT)
     GPIO.setup(left_forward,GPIO.OUT)
     GPIO.setup(left_back,GPIO.OUT)
-    GPIO.setup(right_pwm,GPIO.OUT)
+    # GPIO.setup(right_pwm,GPIO.OUT)
     GPIO.setup(right_forward,GPIO.OUT)
     GPIO.setup(right_back,GPIO.OUT)
 
@@ -75,6 +75,7 @@ if __name__ == "__main__":
     
     left_pwm = GPIO.PWM(left_pwm,freq)
     right_pwm = GPIO.PWM(right_pwm,freq)
+    # right_pwm = GPIO.PWM
     
     left_dc = 25
     right_dc = 25
