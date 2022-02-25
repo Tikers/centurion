@@ -15,7 +15,7 @@ with open(config_file) as f:
 
 
 # TODO correct way? Not yet in course
-class SpeedError(Exception):
+class DC_Error(Exception):
     """_summary_
 
     Args:
@@ -24,7 +24,7 @@ class SpeedError(Exception):
     pass
 
 
-class RPiDCMotor:
+class RPiMotor:
     """
     control motor settings with the raspberry pi
     """
@@ -70,7 +70,7 @@ class RPiDCMotor:
     def __set_speed(self, desired_dc):
         if not self.__pin_pwm:
             # TODO correct way? Not yet in course
-            raise SpeedError("No speed control!")
+            raise DC_Error("No speed control!")
         else:
             desired_dc = abs(desired_dc) if abs(desired_dc) < 100 else 100
             self.__duty_cycle = desired_dc
@@ -95,7 +95,7 @@ class RPiDCMotor:
     def change_speed(self, delta):
         if not self.__pin_pwm:
             # TODO correct way? Not yet in course
-            raise SpeedError("No speed control!")
+            raise DC_Error("No speed control!")
 
         new_dc = self.__duty_cycle + delta
         new_direction = sign(new_dc)
@@ -138,10 +138,10 @@ if __name__ == "__main__":
     
     GPIO.setmode(GPIO.BOARD)
 
-    left_motor = RPiDCMotor(conf['RPi']['left_motor']['forward'], 
+    left_motor = RPiMotor(conf['RPi']['left_motor']['forward'], 
                             conf['RPi']['left_motor']['reverse'], 
                             conf['RPi']['left_motor']['pwm'])
-    right_motor = RPiDCMotor(conf['RPi']['right_motor']['forward'], 
+    right_motor = RPiMotor(conf['RPi']['right_motor']['forward'], 
                             conf['RPi']['right_motor']['reverse'], 
                             conf['RPi']['right_motor']['pwm'])
 
