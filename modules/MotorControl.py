@@ -117,8 +117,13 @@ def sign(val):
     return True if val < 0 else False
 
 def steer(speed_change):
+    #TODO steering!!! of the robot
     return
 
+
+def stop(left_motor, right_motor):
+    left_motor.stop()
+    right_motor.stop()
 
 if __name__ == "__main__":
     print("Main Started from MotroControl.py v2")
@@ -129,9 +134,10 @@ if __name__ == "__main__":
     right_motor = RPiDCMotor(18 , 16, 22)
 
     for i in range(4):
-        left_motor.change_speed(25)
-        right_motor.change_speed(25)
+        left_motor.change_speed(20)
+        right_motor.change_speed(20)
         print("DC= ", left_motor.get_active_dc())
         time.sleep(2) 
+    stop(left_motor, right_motor)
 
     GPIO.cleanup()
