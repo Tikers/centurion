@@ -38,18 +38,27 @@ class RPiDCMotor:
         """
         self.__pin_forward = forward_pin
         GPIO.setup(forward_pin, GPIO.OUT)
+        # self.__motor_type = "direct drive"
         if reverse_pin:
             self.__pin_reverse = reverse_pin
             GPIO.setup(reverse_pin, GPIO.OUT)
+            # self.__motor_type = "bi directional"
         if pwm_pin:
             self.__pin_pwm = pwm_pin
             GPIO.setup(pwm_pin, GPIO.OUT)
             self.__pwm = GPIO.PWM(pwm_pin, pwm_freq)
-            # set duty cycle to 0 #TODO check if this is always off!
             self.__duty_cycle = 0
             self.__pwm.start(self.__duty_cycle)
+            # self.__motor_type = "PWM control"
         # set motors in to forward as default
         self.__set_direction()
+
+    def __str__(self) -> str:
+        str = "one direction"
+        if self.__pin_reverse: str = "bi directional"
+        if self.__pin_pwm: str + " with pwm control;" 
+        str += self.__duty_cycle + " dutycicy"
+        return str
 
     def __set_speed(self, desired_dc):
         if not self.__pin_pwm:
@@ -92,7 +101,7 @@ class RPiDCMotor:
             pass
         self.__set_speed(new_dc)
 
-    def get_active_dc(self):
+    def get_active_dc(self) -> int:
         return self.__duty_cycle
 
 
