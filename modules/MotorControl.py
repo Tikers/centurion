@@ -4,7 +4,14 @@
 import time
 
 import RPi.GPIO as GPIO
+import json
 from numpy import sign
+
+config_file = 'config.json'
+with open(config_file) as f:
+    conf = json.loads(f.read())
+
+# print(conf['RPi']['left_motor'])
 
 
 # TODO correct way? Not yet in course
@@ -128,12 +135,15 @@ def stop(left_motor, right_motor):
     right_motor.stop()
 
 if __name__ == "__main__":
-    print("Main Started from MotroControl.py v2")
-
+    
     GPIO.setmode(GPIO.BOARD)
 
-    left_motor = RPiDCMotor(15, 13, 11)
-    right_motor = RPiDCMotor(18, 16, 22)
+    left_motor = RPiDCMotor(conf['RPi']['left_motor']['forward'], 
+                            conf['RPi']['left_motor']['reverse'], 
+                            conf['RPi']['left_motor']['pwm'])
+    right_motor = RPiDCMotor(conf['RPi']['right_motor']['forward'], 
+                            conf['RPi']['right_motor']['reverse'], 
+                            conf['RPi']['right_motor']['pwm'])
 
     for i in range(4):
         left_motor.change_speed(20)
