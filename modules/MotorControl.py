@@ -10,6 +10,7 @@ from numpy import sign
 config_file = 'config.json'
 with open(config_file) as f:
     conf = json.loads(f.read())
+    motors = conf['RPi']
 
 # print(conf['RPi']['left_motor'])
 
@@ -138,12 +139,12 @@ if __name__ == "__main__":
     
     GPIO.setmode(GPIO.BOARD)
 
-    left_motor = RPiMotor(conf['RPi']['left_motor']['forward'], 
-                            conf['RPi']['left_motor']['reverse'], 
-                            conf['RPi']['left_motor']['pwm'])
-    right_motor = RPiMotor(conf['RPi']['right_motor']['forward'], 
-                            conf['RPi']['right_motor']['reverse'], 
-                            conf['RPi']['right_motor']['pwm'])
+    left_motor = RPiMotor(motors['left_motor']['forward'], 
+                          motors['left_motor']['reverse'], 
+                          motors['left_motor']['pwm'])
+    right_motor = RPiMotor(motors['right_motor']['forward'], 
+                          motors['right_motor']['reverse'], 
+                          motors['right_motor']['pwm'])
 
     for i in range(4):
         left_motor.change_speed(20)
