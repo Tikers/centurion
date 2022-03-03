@@ -1,0 +1,47 @@
+<style>
+    #button1{
+      width: 200px;
+      height: 60px;
+    }
+    #button2{
+    width: 200px;
+    height: 60px;
+    }
+    #button3{
+    width: 200px;
+    height: 60px;
+    text-align: center;
+    }
+    #button4{
+    width: 200px;
+    height: 60px;
+    text-align: center;
+    }
+    #container{
+    text-align: center;
+    }
+    #container_all{
+      width: 600px;
+      /* text-align: left; */
+    }
+</style>
+
+{% block content %}
+<form method="post">
+  <div id="container">
+    <!-- <form method="post"> -->
+      <!-- <input type="submit" value="forward"> -->
+      <!-- <input type="submit" value="reverse"> -->
+    <button href="/forward" type="button" id="button3">forward</button>
+    <div id="container">
+      <button type="button" id="button1">left</button>
+      <button type="button" id="button2">right</button>
+    </div>
+    <button type="button" id="button4">reverse</button>
+  </div>
+    <!-- </form> -->
+  <div>
+    <!-- <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');"> -->
+  </div>
+</form>
+{% endblock %}

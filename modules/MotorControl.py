@@ -4,13 +4,16 @@
 import time
 
 import RPi.GPIO as GPIO
-import json
+from centurion.config import get_config
+# import json
 from numpy import sign
 
-config_file = 'config.json'
-with open(config_file) as f:
-    conf = json.loads(f.read())
-    motors = conf['RPi']
+# import config settings
+# config_file = '..//config.json'
+# with open(config_file) as f:
+#     conf = json.loads(f.read())
+#     motors = conf['RPi']
+conf = get_config()
 
 # print(conf['RPi']['left_motor'])
 
@@ -46,18 +49,15 @@ class RPiMotor:
         """
         self.__pin_forward = forward_pin
         GPIO.setup(forward_pin, GPIO.OUT)
-        # self.__motor_type = "direct drive"
         if reverse_pin:
             self.__pin_reverse = reverse_pin
             GPIO.setup(reverse_pin, GPIO.OUT)
-            # self.__motor_type = "bi directional"
         if pwm_pin:
             self.__pin_pwm = pwm_pin
             GPIO.setup(pwm_pin, GPIO.OUT)
             self.__pwm = GPIO.PWM(pwm_pin, pwm_freq)
             self.__duty_cycle = 0
             self.__pwm.start(self.__duty_cycle)
-            # self.__motor_type = "PWM control"
         # set motors in to forward as default
         self.__set_direction()
 
@@ -73,8 +73,9 @@ class RPiMotor:
             # TODO correct way? Not yet in course
             raise DC_Error("No speed control!")
         else:
+            s = sign(desired_dc)
             desired_dc = abs(desired_dc) if abs(desired_dc) < 100 else 100
-            self.__duty_cycle = desired_dc
+            self.__duty_cycle = desired_dc * s
             self.__pwm.ChangeDutyCycle(desired_dc)
 
     def __set_direction(self, forward=True):
@@ -89,6 +90,7 @@ class RPiMotor:
             GPIO.output(self.__pin_reverse, not forward)
 
     def stop(self):
+        self.__set_speed(0)
         GPIO.output(self.__pin_forward, False)
         if self.__pin_reverse:
             GPIO.output(self.__pin_reverse, False)
@@ -108,6 +110,8 @@ class RPiMotor:
                 self.__set_direction(False)
             pass
         self.__set_speed(new_dc)
+        self.__duty_cycle = new_dc
+        print(f'new dc left = {new_dc}')
 
     def get_active_dc(self) -> int:
         return self.__duty_cycle
@@ -121,9 +125,9 @@ def steer(motor, steer_rate):
     #TODO if motor already on minimum increase other side speed?
     if steer_rate < 0:
         #left.change_speed(-steer_rate)
-        pass
+        ...
     else:
-        pass
+        ...
 
 
 def steer(speed_change):
